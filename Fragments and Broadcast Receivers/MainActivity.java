@@ -1,6 +1,5 @@
-package com.example.cs478project3app1;
+package com.example.cs478project3app2;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -22,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mButton;
     private IntentFilter mFilter;
     private BroadcastReceiver mReceiver;
-    //private static final String STRING_FILTER = "com.example.cs478project3app1";
+    //private static final String STRING_FILTER = "com.example.cs478project3app2";
     private static final String NEEDED_PERMISSION =
             "uic.edu.cs478.f20.kaboom" ;
 
@@ -43,12 +42,13 @@ public class MainActivity extends AppCompatActivity {
     private void checkPermissionNeeded() {
         // Permission already granted
         if(ContextCompat.checkSelfPermission(this, NEEDED_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
-            // Application 1 registers its broadcast receiver and Application 2's Main Activity launched
+            // Application 2 registers its broadcast receiver and Application 3's Main Activity launched
             registerReceiver();
-            Toast.makeText(this, "Application 1 permission granted", Toast.LENGTH_LONG).show();
-            Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.example.cs478project3app2");
+            Toast.makeText(this, "Application 2 permission granted", Toast.LENGTH_LONG).show();
+            Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.example.cs478project3app3");
             startActivity(launchIntent);
         }
+
         // Request permission
         else {
             ActivityCompat.requestPermissions(this, new String[]{NEEDED_PERMISSION}, PERMISSION_CODE);
@@ -60,15 +60,21 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == PERMISSION_CODE) {
             // Permission granted
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // // Application 1 registers its broadcast receiver and Application 2's Main Activity launched
+                // // Application 2 registers its broadcast receiver and Application 3's Main Activity launched
                 registerReceiver();
-                Toast.makeText(this, "Application 1 permission granted", Toast.LENGTH_LONG).show();
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.example.cs478project3app2");
+                Toast.makeText(this, "Application 2 permission granted", Toast.LENGTH_LONG).show();
+                Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.example.cs478project3app3");
                 startActivity(launchIntent);
             }
+//            else if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+//                Toast.makeText(this, "Application 2 permission denied", Toast.LENGTH_LONG).show();
+//                finish();
+//            }
             else {
                 // Display toast message of permission denied
-                Toast.makeText(this, "Application 1 permission was denied", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Application 2 permission was denied", Toast.LENGTH_LONG).show();
+                // Terminates itself
+                finish();
             }
         }
 
@@ -77,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     // Registers receiver
     private void registerReceiver() {
         mFilter = new IntentFilter(NEEDED_PERMISSION);
-        mFilter.setPriority(5);
+        mFilter.setPriority(20);
         mReceiver = new myReceiver();
         registerReceiver(mReceiver, mFilter);
     }
@@ -89,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
         // Try/Catch so application won't crash
         try {
             unregisterReceiver(mReceiver);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch(Exception e) {
+          e.printStackTrace();
         }
     }
 }
